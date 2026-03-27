@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="mg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Betting Tips UI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #1a1f2c; color: white; font-family: sans-serif; }
+        .card-bg { background-color: #252b39; }
+        .accent-yellow { color: #facc15; }
+        .bg-yellow-gold { background-color: #facc15; }
+        .border-dashed-custom { border: 2px dashed #3f4859; }
+    </style>
+</head>
+<body class="p-4 max-w-md mx-auto">
+
+    <div class="flex justify-between items-center mb-6">
+        <div class="bg-yellow-gold p-2 rounded-lg text-black">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="bg-[#2d3548] px-3 py-1 rounded-full flex items-center gap-2">
+                <span class="text-yellow-400 text-xs">🟡 4960</span>
+            </div>
+            <div class="relative">
+                <i class="fas fa-shopping-cart text-yellow-500 text-xl"></i>
+                <span class="absolute -top-2 -right-2 bg-red-500 text-[10px] rounded-full px-1">+</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex overflow-x-auto gap-4 mb-8 text-[10px] uppercase font-bold text-gray-400 border-b border-gray-700 pb-2">
+        <span class="flex items-center gap-1"><i class="fas fa-bolt"></i> TIPS</span>
+        <span class="flex items-center gap-1"><i class="fas fa-check-circle"></i> MULTIPLE</span>
+        <span class="bg-yellow-gold text-black px-3 py-1 rounded-full flex items-center gap-1">
+            <i class="fas fa-play-circle"></i> BEST LIVE
+        </span>
+        <span class="flex items-center gap-1"><i class="fas fa-gem"></i> VIP</span>
+        <span class="flex items-center gap-1"><i class="fas fa-trophy"></i> RESULTS</span>
+    </div>
+
+    <div class="text-center mb-8">
+        <div class="flex justify-center mb-2 text-cyan-400 text-4xl">
+            <i class="fas fa-chart-line"></i>
+        </div>
+        <h1 class="text-xl font-bold mb-1">Best Live</h1>
+        <p class="text-xs text-gray-400 px-10 leading-tight">
+            Analyse en temps réel des meilleurs matchs en cours pour des paris en direct.
+        </p>
+    </div>
+
+    <div class="card-bg rounded-2xl p-4 mb-6 relative">
+        <div class="flex items-center gap-3 mb-4">
+            <span class="bg-emerald-500 text-black w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm">1</span>
+            <h2 class="font-semibold text-sm">Historique (Upload)</h2>
+        </div>
+
+        <div class="border-dashed-custom rounded-xl p-8 text-center mb-4 cursor-pointer">
+            <i class="fas fa-upload text-3xl text-gray-500 mb-3"></i>
+            <p class="text-xs text-gray-400">
+                <span class="text-emerald-400 font-bold">Cliquez</span> ou glissez vos images
+            </p>
+            <p class="text-[10px] text-gray-500 mt-1">PNG, JPG (Max 5 images)</p>
+        </div>
+
+        <button class="w-full bg-[#363f54] py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 text-gray-300">
+            <i class="fas fa-save"></i> Sauvegarder historique
+        </button>
+    </div>
+
+    <div class="card-bg rounded-2xl p-4 mb-6">
+        <div class="flex items-center gap-3 mb-4">
+            <span class="bg-yellow-gold text-black w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm">2</span>
+            <h2 class="font-semibold text-sm text-gray-300">Nouvelle Analyse (Upload Matchs)</h2>
+        </div>
+
+        <div class="border-dashed-custom rounded-xl p-8 text-center mb-4 opacity-50">
+             <i class="far fa-image text-3xl text-gray-500 mb-3"></i>
+             <p class="text-xs text-gray-400">
+                <span class="text-yellow-500 font-bold">Uploadez</span> les matchs à analyser
+            </p>
+        </div>
+
+        <input type="text" placeholder="English League" class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm mb-3 outline-none">
+        
+        <button class="w-full bg-yellow-gold py-3 rounded-xl text-black font-bold text-sm flex items-center justify-center gap-2">
+            <i class="fas fa-search"></i> Lancer l'analyse (1 Token)
+        </button>
+    </div>
+
+</body>
+</html>
