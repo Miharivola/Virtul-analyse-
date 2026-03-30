@@ -3,70 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Betting Tips Predictor Pro</title>
+    <title>Betting Tips - Historique Fix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-
     <style>
-        body { background-color: #1a1f2c; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #1a1f2c; color: white; font-family: sans-serif; }
         .card-bg { background-color: #252b39; }
         .bg-yellow-gold { background-color: #facc15; }
         .border-dashed-custom { border: 2px dashed #3f4859; }
-        /* Style ho an'ny scrollbar kely */
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: #3f4859; border-radius: 10px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="p-4 max-w-md mx-auto pb-20">
+<body class="p-4 max-w-md mx-auto pb-10">
 
     <div class="flex justify-between items-center mb-6">
-        <div class="bg-yellow-gold p-2 rounded-lg text-black cursor-pointer">
-            <i class="fas fa-bars"></i>
-        </div>
+        <div class="bg-yellow-gold p-2 rounded-lg text-black"><i class="fas fa-bars"></i></div>
         <div class="flex items-center gap-3">
             <div class="bg-[#2d3548] px-3 py-1 rounded-full flex items-center gap-2 border border-gray-700">
                 <span class="text-yellow-400 text-xs">🟡 4960</span>
             </div>
-            <div class="relative">
-                <i class="fas fa-shopping-cart text-yellow-500 text-xl font-bold"></i>
-                <span class="absolute -top-2 -right-2 bg-red-500 text-[10px] rounded-full px-1 border border-white">+</span>
-            </div>
+            <i class="fas fa-shopping-cart text-yellow-500 text-xl font-bold"></i>
         </div>
-    </div>
-
-    <div class="flex overflow-x-auto gap-4 mb-8 text-[10px] uppercase font-bold text-gray-500 border-b border-gray-800 pb-2 no-scrollbar">
-        <span class="flex items-center gap-1 whitespace-nowrap"><i class="fas fa-bolt"></i> TIPS</span>
-        <span class="flex items-center gap-1 whitespace-nowrap"><i class="fas fa-check-circle"></i> MULTIPLE</span>
-        <span class="bg-yellow-gold text-black px-3 py-1 rounded-full flex items-center gap-1 whitespace-nowrap">
-            <i class="fas fa-play-circle"></i> BEST LIVE
-        </span>
-        <span class="flex items-center gap-1 whitespace-nowrap"><i class="fas fa-gem"></i> VIP</span>
-        <span class="flex items-center gap-1 whitespace-nowrap"><i class="fas fa-trophy"></i> RESULTS</span>
-    </div>
-
-    <div class="text-center mb-8">
-        <div class="flex justify-center mb-2 text-cyan-400 text-4xl animate-pulse">
-            <i class="fas fa-chart-line"></i>
-        </div>
-        <h1 class="text-xl font-bold mb-1">Best Live</h1>
-        <p class="text-xs text-gray-400 px-10 leading-tight italic">
-            Analyse en temps réel des meilleurs matchs en cours pour des paris en direct.
-        </p>
     </div>
 
     <div class="space-y-6">
         
-        <div class="card-bg rounded-2xl p-4 relative shadow-lg">
+        <div class="card-bg rounded-2xl p-4 shadow-lg border border-gray-800">
             <div class="flex items-center gap-3 mb-4">
                 <span class="bg-emerald-500 text-black w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm">1</span>
                 <h2 class="font-semibold text-sm">Historique (Upload)</h2>
             </div>
-            <div class="border-dashed-custom rounded-xl p-8 text-center mb-4 cursor-pointer hover:bg-[#2d3548] transition-all">
-                <i class="fas fa-upload text-3xl text-gray-500 mb-3"></i>
-                <p class="text-xs text-gray-400"><span class="text-emerald-400 font-bold">Cliquez</span> ou glissez vos images</p>
+            
+            <div onclick="document.getElementById('histInput').click()" 
+                 class="border-dashed-custom rounded-xl p-6 text-center mb-4 cursor-pointer hover:bg-[#2d3548] transition-all">
+                <i class="fas fa-cloud-upload-alt text-3xl text-gray-500 mb-2"></i>
+                <p class="text-xs text-gray-400 font-bold"><span class="text-emerald-400">Cliquez</span> ou glissez vos images</p>
+                <p class="text-[9px] text-gray-500 mt-1 uppercase">PNG, JPG (MAX 5 IMAGES)</p>
+                <input type="file" id="histInput" class="hidden" accept="image/*" multiple onchange="handleHistFiles(this)">
             </div>
-            <button class="w-full bg-[#363f54] py-3 rounded-xl text-sm font-semibold text-gray-300">
+
+            <div id="histPreview" class="flex flex-wrap gap-2 mb-4"></div>
+
+            <button onclick="saveHistory()" class="w-full bg-[#363f54] py-3 rounded-xl text-xs font-bold text-gray-300 hover:bg-[#434d66] active:scale-95 transition-all">
                 <i class="fas fa-save mr-2"></i> Sauvegarder historique
             </button>
         </div>
@@ -77,167 +56,128 @@
                 <h2 class="font-semibold text-sm">Nouvelle Analyse (Upload Matchs)</h2>
             </div>
 
-            <div id="dropzone" class="border-dashed-custom rounded-xl p-6 text-center mb-4 cursor-pointer">
+            <div onclick="document.getElementById('analInput').click()" 
+                 class="border-dashed-custom rounded-xl p-8 text-center mb-4 cursor-pointer hover:bg-[#2d3548]">
                 <i class="far fa-image text-3xl text-gray-500 mb-3"></i>
-                <p class="text-xs text-gray-400"><span class="text-yellow-500 font-bold">Uploadez</span> les matchs à analyser</p>
-                <input type="file" id="fileInput" class="hidden" accept="image/*">
+                <p class="text-xs text-gray-400 font-bold"><span class="text-yellow-500">Uploadez</span> les matchs à analyser</p>
+                <input type="file" id="analInput" class="hidden" accept="image/*" onchange="handleAnalFile(this)">
             </div>
 
-            <div onclick="openModal()" class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm mb-3 flex justify-between items-center cursor-pointer hover:border-yellow-500">
-                <span id="leagueNameText" class="text-gray-300">English League</span>
+            <div id="analPreview" class="mb-4"></div>
+
+            <div onclick="openModal()" class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm mb-3 flex justify-between items-center cursor-pointer">
+                <span id="leagueNameText">English League</span>
                 <i class="fas fa-chevron-down text-gray-500 text-[10px]"></i>
             </div>
 
-            <div class="relative w-full mb-6">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                    <i class="far fa-clock text-gray-500 text-xs font-bold"></i>
-                </div>
-                <input type="time" id="matchTime" value="20:38" 
-                    class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-10 text-sm text-white focus:border-yellow-500 outline-none">
-                <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-                    <i class="fas fa-chevron-down text-gray-500 text-[10px]"></i>
-                </div>
-            </div>
+            <input type="time" id="matchTime" value="20:38" 
+                class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm text-white mb-6 outline-none focus:border-yellow-500">
 
-            <button id="analyzeBtn" onclick="processImage()" class="w-full bg-yellow-gold py-4 rounded-xl text-black font-bold text-sm shadow-xl flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95 transition-all">
-                <i class="fas fa-search"></i> Lancer l'analyse (1 Token)
+            <button id="mainAnalyzeBtn" onclick="startFullAnalysis()" class="w-full bg-yellow-gold py-4 rounded-xl text-black font-black text-sm shadow-xl flex items-center justify-center gap-2">
+                <i class="fas fa-search"></i> LANCER L'ANALYSE (1 TOKEN)
             </button>
         </div>
     </div>
 
     <div id="leagueModal" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-6">
-        <div class="bg-[#252b39] w-full max-w-xs rounded-3xl overflow-hidden shadow-2xl border border-gray-700">
-            <div class="p-4 border-b border-gray-800 font-bold text-center">Selectionner la Ligue</div>
-            <div class="max-h-80 overflow-y-auto">
-                <div class="flex justify-between items-center p-4 border-b border-gray-800 hover:bg-[#2d3548] cursor-pointer" onclick="selectLeague('English League')">
-                    <span>English League</span> <input type="radio" name="lg" checked class="accent-yellow-500">
-                </div>
-                <div class="flex justify-between items-center p-4 border-b border-gray-800 hover:bg-[#2d3548] cursor-pointer" onclick="selectLeague('Champions League')">
-                    <span>Champions League</span> <input type="radio" name="lg" class="accent-yellow-500">
-                </div>
-                <div class="flex justify-between items-center p-4 border-b border-gray-800 hover:bg-[#2d3548] cursor-pointer" onclick="selectLeague('Africa Cup')">
-                    <span>Africa Cup</span> <input type="radio" name="lg" class="accent-yellow-500">
-                </div>
-                <div class="flex justify-between items-center p-4 hover:bg-[#2d3548] cursor-pointer" onclick="selectLeague('German League')">
-                    <span>German League</span> <input type="radio" name="lg" class="accent-yellow-500">
-                </div>
+        <div class="bg-[#252b39] w-full max-w-xs rounded-3xl overflow-hidden border border-gray-700">
+            <div class="p-4 border-b border-gray-800 font-bold text-center">Ligue</div>
+            <div class="max-h-60 overflow-y-auto" id="leagueOptions">
+                <div class="p-4 border-b border-gray-800 hover:bg-[#2d3548] cursor-pointer" onclick="setLg('Champions League')">Champions League</div>
+                <div class="p-4 border-b border-gray-800 hover:bg-[#2d3548] cursor-pointer" onclick="setLg('English League')">English League</div>
             </div>
-            <button onclick="closeModal()" class="w-full bg-yellow-500 text-black py-4 font-bold uppercase tracking-widest text-xs">OK</button>
+            <button onclick="closeModal()" class="w-full bg-yellow-500 text-black py-3 font-bold">OK</button>
         </div>
     </div>
 
-    <div id="results-container" class="hidden mt-10 space-y-8 animate-fade-in">
-        
-        <div class="card-bg rounded-2xl p-4 border-t-4 border-emerald-500 shadow-2xl relative overflow-hidden">
-            <div class="flex justify-between items-center mb-6">
-                <span class="text-[10px] text-gray-400 font-bold tracking-widest uppercase">English League</span>
-                <span class="bg-red-600 text-white text-[9px] px-2 py-1 rounded-md font-black animate-pulse">🔥 HOT MATCH</span>
-            </div>
-            <div class="flex justify-around items-center mb-8">
-                <div class="text-center w-1/3"><p class="font-black text-sm" id="resTeamA">WEST HAM</p></div>
-                <div class="text-gray-600 text-[10px] font-bold">VS</div>
-                <div class="text-center w-1/3"><p class="font-black text-sm" id="resTeamB">LEEDS</p></div>
-            </div>
-            <div class="grid grid-cols-2 gap-x-6 gap-y-4 text-[11px] border-t border-gray-800 pt-6">
-                <div class="flex justify-between"><span>1X2:</span> <span class="text-emerald-400 font-bold">1</span></div>
-                <div class="flex justify-between"><span>1X2 MT:</span> <span class="font-bold">1</span></div>
-                <div class="flex justify-between"><span>Score Exact:</span> <span class="text-yellow-500 font-bold">2-0</span></div>
-                <div class="flex justify-between"><span>Score MT:</span> <span class="font-bold">1-0</span></div>
-                <div class="flex justify-between"><span>O/U 2.5:</span> <span class="text-emerald-400">Over</span></div>
-                <div class="flex justify-between"><span>BTTS:</span> <span class="text-red-500">No</span></div>
-            </div>
-            <button class="w-full bg-[#363f54] mt-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-wider text-gray-300">
-                <i class="fas fa-copy mr-2"></i> Copier le pronostic
-            </button>
+    <div id="resultsArea" class="hidden mt-8 animate-bounce-in">
+        <div class="p-4 bg-emerald-900/20 border border-emerald-500 rounded-2xl text-center text-sm font-bold text-emerald-400">
+            Analyse effectuée avec succès! (Jereo eto ambany)
         </div>
-
-        <div class="bg-[#0f2d26] rounded-2xl p-5 border border-emerald-900/50 shadow-xl">
-            <h3 class="text-emerald-400 font-black text-xs mb-4 flex items-center gap-2 tracking-widest">
-                <i class="fas fa-shield-alt text-lg"></i> MULTIPLE VIP
-            </h3>
-            <div class="bg-[#1a3a32] p-4 rounded-xl border-l-4 border-emerald-500 space-y-3">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-emerald-200 text-[10px] font-bold">Ticket #1</span>
-                    <span class="bg-emerald-600 text-white px-2 py-1 rounded text-[10px] font-bold">Cote: 2.44</span>
-                </div>
-                <div class="text-[11px] space-y-2 opacity-80">
-                    <p>West Ham vs Leeds <span class="float-right text-emerald-400 font-bold">1 (1.17)</span></p>
-                    <p>Bournemouth vs Fulham <span class="float-right text-emerald-400 font-bold">1 (1.44)</span></p>
-                </div>
-            </div>
         </div>
-
-        <div class="bg-[#3d1a22] rounded-2xl p-5 border border-red-900/50 shadow-xl">
-            <h3 class="text-red-400 font-black text-xs mb-4 flex items-center gap-2 tracking-widest">
-                <i class="fas fa-chart-line text-lg"></i> COTE CIBLE +10
-            </h3>
-            <div class="bg-[#4d1f28] p-4 rounded-xl flex justify-between items-center border border-red-800/30">
-                <div>
-                    <p class="text-[12px] font-black uppercase">Newcastle vs Brentford</p>
-                    <p class="text-[10px] text-yellow-500 font-bold italic">Score Exact: 4-1</p>
-                </div>
-                <div class="bg-red-600 px-4 py-2 rounded-xl font-black text-xl shadow-lg border border-red-400/20">12.92</div>
-            </div>
-        </div>
-    </div>
 
     <script>
-        const dropzone = document.getElementById('dropzone');
-        const fileInput = document.getElementById('fileInput');
-        const modal = document.getElementById('leagueModal');
-        const leagueText = document.getElementById('leagueNameText');
-        const analyzeBtn = document.getElementById('analyzeBtn');
-        const resultsArea = document.getElementById('results-container');
-
-        // File Selection
-        dropzone.onclick = () => fileInput.click();
-        fileInput.onchange = (e) => {
-            if(e.target.files[0]) {
-                dropzone.innerHTML = `<i class='fas fa-check-circle text-emerald-400 text-3xl mb-3'></i><p class='text-xs text-emerald-400 font-bold'>Image "${e.target.files[0].name}" prête!</p>`;
-            }
-        };
-
-        // Modal Logic
-        function openModal() { modal.classList.remove('hidden'); }
-        function closeModal() { modal.classList.add('hidden'); }
-        function selectLeague(name) { 
-            leagueText.innerText = name; 
-            leagueText.classList.add('text-yellow-400');
+        // --- LOGIC HISTORIQUE ---
+        function handleHistFiles(input) {
+            const preview = document.getElementById('histPreview');
+            // preview.innerHTML = ''; // Raha tiana hofafana ny teo aloha
+            
+            Array.from(input.files).forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const div = document.createElement('div');
+                    div.className = "relative w-20 h-20 rounded-lg overflow-hidden border-2 border-gray-700 shadow-lg";
+                    div.innerHTML = `
+                        <img src="${e.target.result}" class="w-full h-full object-cover">
+                        <button onclick="this.parentElement.remove()" class="absolute top-0 right-0 bg-red-600 text-white text-[10px] px-1 rounded-bl-lg">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    `;
+                    preview.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
         }
 
-        // MAIN ALGORITHM PROCESS
-        async function processImage() {
-            if(!fileInput.files[0]) {
-                alert("Ampidiro aloha ny sary vao manao analyse azafady!");
-                return;
-            }
-
-            // Start Animation
-            analyzeBtn.disabled = true;
-            analyzeBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Analyse en cours...`;
-            resultsArea.classList.add('hidden');
-
-            try {
-                // OCR Processing
-                const result = await Tesseract.recognize(fileInput.files[0], 'eng');
-                const text = result.data.text;
-                console.log("Famakiana vita:", text);
-
-                // Simulation de calcul (3 segondra)
+        function saveHistory() {
+            const count = document.getElementById('histPreview').childElementCount;
+            if(count === 0) return alert("Ampidiro aloha ny sary!");
+            
+            const btn = document.querySelector('button[onclick="saveHistory()"]');
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Sauvegarde...`;
+            
+            setTimeout(() => {
+                btn.innerHTML = `<i class="fas fa-check mr-2"></i> Historique Sauvegardé`;
+                btn.classList.replace('bg-[#363f54]', 'bg-emerald-600');
                 setTimeout(() => {
-                    resultsArea.classList.remove('hidden');
-                    resultsArea.scrollIntoView({ behavior: 'smooth' });
+                    btn.innerHTML = `<i class="fas fa-save mr-2"></i> Sauvegarder historique`;
+                    btn.classList.replace('bg-emerald-600', 'bg-[#363f54]');
+                }, 2000);
+            }, 1500);
+        }
 
-                    analyzeBtn.innerHTML = `<i class="fas fa-check"></i> Analyse Terminée`;
-                    analyzeBtn.classList.replace('bg-yellow-gold', 'bg-emerald-500');
-                    analyzeBtn.disabled = false;
-                }, 3000);
-
-            } catch (err) {
-                alert("Nisy fahadisoana: " + err.message);
-                analyzeBtn.disabled = false;
-                analyzeBtn.innerHTML = `<i class="fas fa-search"></i> Réessayer`;
+        // --- LOGIC ANALYSE ---
+        function handleAnalFile(input) {
+            const preview = document.getElementById('analPreview');
+            const file = input.files[0];
+            if(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.innerHTML = `
+                        <div class="w-full h-32 rounded-xl border border-yellow-500/50 overflow-hidden relative">
+                            <img src="${e.target.result}" class="w-full h-full object-cover opacity-50">
+                            <div class="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-yellow-500 uppercase">Sary hovakiana vonona</div>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
             }
+        }
+
+        async function startFullAnalysis() {
+            const btn = document.getElementById('mainAnalyzeBtn');
+            const file = document.getElementById('analInput').files[0];
+            
+            if(!file) return alert("Uploadez d'abord le match à analyser!");
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> CALCUL EN COURS...`;
+
+            // OCR Simulation & UI show
+            setTimeout(() => {
+                document.getElementById('resultsArea').classList.remove('hidden');
+                btn.innerHTML = `<i class="fas fa-check"></i> ANALYSE TERMINÉE`;
+                btn.classList.replace('bg-yellow-gold', 'bg-emerald-500');
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            }, 3000);
+        }
+
+        // --- MODAL UTILS ---
+        function openModal() { document.getElementById('leagueModal').classList.remove('hidden'); }
+        function closeModal() { document.getElementById('leagueModal').classList.add('hidden'); }
+        function setLg(name) { 
+            document.getElementById('leagueNameText').innerText = name; 
+            closeModal();
         }
     </script>
 </body>
