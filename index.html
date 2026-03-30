@@ -7,12 +7,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #1a1f2c; color: white; font-family: sans-serif; }
+        body { background-color: #1a1f2c; color: white; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
         .card-bg { background-color: #252b39; }
         .bg-yellow-gold { background-color: #facc15; }
         .border-dashed-custom { border: 2px dashed #3f4859; }
-        .animate-fade { animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        select { border: none; outline: none; background: transparent; color: white; }
     </style>
 </head>
 <body class="p-4 max-w-md mx-auto pb-24">
@@ -21,7 +22,7 @@
         <div class="bg-yellow-gold p-2 rounded-lg text-black"><i class="fas fa-bars"></i></div>
         <div class="flex items-center gap-3">
             <div class="bg-[#2d3548] px-3 py-1 rounded-full border border-gray-700 text-xs text-yellow-400">🟡 4959</div>
-            <i class="fas fa-shopping-cart text-yellow-500 text-xl"></i>
+            <i class="fas fa-shopping-cart text-yellow-500 text-xl font-bold"></i>
         </div>
     </div>
 
@@ -32,10 +33,26 @@
         <span><i class="fas fa-poll"></i> RESULTS</span>
     </div>
 
+    <div class="card-bg rounded-2xl p-4 shadow-lg mb-6 border border-gray-800">
+        <div class="flex items-center gap-3 mb-4">
+            <span class="bg-emerald-500 text-black w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm">1</span>
+            <h2 class="font-semibold text-sm italic">Historique (Upload)</h2>
+        </div>
+        <div onclick="document.getElementById('histInput').click()" class="border-dashed-custom rounded-xl p-6 text-center mb-4 cursor-pointer">
+            <i class="fas fa-cloud-upload-alt text-3xl text-gray-500 mb-2"></i>
+            <p class="text-xs text-gray-400 font-bold">Cliquez pour ajouter des images</p>
+            <input type="file" id="histInput" class="hidden" multiple onchange="handleHistFiles(this)">
+        </div>
+        <div id="histPreview" class="flex flex-wrap gap-2 mb-4"></div>
+        <button onclick="saveHistory()" id="btnSaveHist" class="w-full bg-[#363f54] py-3 rounded-xl text-xs font-bold text-gray-300 shadow-lg">
+            <i class="fas fa-save mr-2"></i> Sauvegarder historique
+        </button>
+    </div>
+
     <div class="card-bg rounded-2xl p-4 shadow-lg border border-gray-800 mb-8">
         <div class="flex items-center gap-3 mb-4">
             <span class="bg-yellow-gold text-black w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm">2</span>
-            <h2 class="font-semibold text-sm">Nouvelle Analyse (Upload Matchs)</h2>
+            <h2 class="font-semibold text-sm italic">Nouvelle Analyse (Upload Matchs)</h2>
         </div>
         <div onclick="document.getElementById('analInput').click()" class="border-dashed-custom rounded-xl p-8 text-center mb-4 cursor-pointer">
             <i class="far fa-image text-3xl text-gray-500 mb-3"></i>
@@ -44,118 +61,124 @@
         </div>
         <div id="analPreview" class="mb-4"></div>
 
-        <div class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm mb-3 flex justify-between">
-            <span id="lgSelected">English League</span> <i class="fas fa-chevron-down text-gray-500"></i>
+        <div class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm mb-3 flex justify-between items-center cursor-pointer">
+            <span>English League</span> <i class="fas fa-chevron-down text-gray-500 text-[10px]"></i>
         </div>
         
-        <input type="time" id="matchTime" value="20:38" class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm text-white mb-6 outline-none">
+        <div class="relative mb-6">
+            <input type="time" id="matchTime" value="20:38" class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm text-white outline-none focus:border-yellow-500">
+        </div>
 
-        <button id="btnMainAnal" onclick="startAIAnalyse()" class="w-full bg-yellow-gold py-4 rounded-xl text-black font-black text-sm shadow-xl">
-             Lancer l'analyse (1 Token)
+        <button id="btnMainAnal" onclick="startAIAnalyse()" class="w-full bg-yellow-gold py-4 rounded-xl text-black font-black text-sm shadow-2xl">
+             LANCER L'ANALYSE (1 TOKEN)
         </button>
     </div>
 
     <div id="resultsContainer" class="hidden space-y-6">
-        <div class="bg-emerald-900/20 border border-emerald-500/50 p-3 rounded-xl text-center text-[10px] font-bold text-emerald-400">
+        <div class="bg-emerald-900/20 border border-emerald-500/50 p-3 rounded-xl text-center text-[10px] font-bold text-emerald-400 tracking-widest">
             ANALYSE TERMINÉE AVEC SUCCÈS !
         </div>
 
-        <div class="card-bg rounded-2xl p-4 border-t-4 border-emerald-500 animate-fade">
+        <div class="card-bg rounded-2xl p-4 border-t-4 border-emerald-500 animate-fade shadow-xl">
             <div class="flex justify-between items-center mb-4 text-[10px] font-bold">
-                <span class="text-gray-400">English League</span>
-                <span class="text-emerald-400">85% Confiance</span>
-                <span class="bg-red-600 px-2 py-0.5 rounded">HOT MATCH</span>
+                <span class="text-gray-400 uppercase">English League</span>
+                <span class="text-emerald-400 tracking-tighter"><i class="fas fa-chart-line mr-1"></i> 85% Confiance</span>
+                <span class="bg-red-600 px-2 py-0.5 rounded text-white shadow-lg">HOT MATCH</span>
             </div>
-            <div class="flex justify-around items-center font-black mb-6 text-sm italic">
-                <span>WEST HAM</span> <span class="text-gray-600 text-xs">VS</span> <span>LEEDS</span>
+            <div class="flex justify-around items-center font-black mb-6 text-[15px] italic tracking-wide">
+                <span>WEST HAM</span> <span class="text-gray-600 text-xs not-italic">VS</span> <span>LEEDS</span>
             </div>
-            <div class="grid grid-cols-2 gap-x-8 gap-y-3 text-[11px] border-t border-gray-800 pt-4">
+            <div class="grid grid-cols-2 gap-y-4 gap-x-8 text-[11px] border-t border-gray-700 pt-4 font-medium">
                 <div class="flex justify-between"><span>1X2:</span> <span class="text-emerald-400 font-bold">1</span></div>
                 <div class="flex justify-between"><span>Score Exact:</span> <span class="text-yellow-500 font-bold">2-0</span></div>
-                <div class="flex justify-between"><span>Lera:</span> <span id="resLera" class="font-bold"></span></div>
+                <div class="flex justify-between"><span>Lera:</span> <span id="resLera" class="font-bold text-white"></span></div>
                 <div class="flex justify-between"><span>BTTS:</span> <span class="text-red-500">No</span></div>
-                <div class="flex justify-between"><span>O/U 2.5:</span> <span class="text-emerald-400">Over</span></div>
-                <div class="flex justify-between"><span>HT/FT:</span> <span class="text-emerald-400">1/1</span></div>
+                <div class="flex justify-between"><span>O/U 2.5:</span> <span class="text-emerald-400 font-bold">Over</span></div>
+                <div class="flex justify-between"><span>HT/FT:</span> <span class="text-emerald-400 font-bold">1/1</span></div>
             </div>
         </div>
 
-        <div class="bg-[#0f2d26] rounded-2xl p-4 border border-emerald-900/50 animate-fade">
-            <h3 class="text-emerald-400 font-bold text-[10px] mb-4 uppercase italic"><i class="fas fa-shield-alt mr-2"></i>MULTIPLE VIP</h3>
+        <div class="bg-[#0f2d26] rounded-2xl p-4 border border-emerald-900/50 animate-fade shadow-lg">
+            <h3 class="text-emerald-400 font-bold text-[11px] mb-4 uppercase italic tracking-wider"><i class="fas fa-shield-alt mr-2"></i>Multiple VIP Tickets</h3>
             <div class="space-y-4">
-                <div class="bg-[#1a3a32] p-3 rounded-lg border-l-4 border-emerald-500 text-[10px]">
-                    <div class="flex justify-between font-bold mb-2"><span>Ticket #1</span> <span class="text-emerald-400">Cote: 2.44</span></div>
-                    <p class="text-gray-300">Bournemouth vs Fulham <span class="float-right text-emerald-400">1 (1.44)</span></p>
-                    <p class="text-gray-300">West Ham vs Leeds <span class="float-right text-emerald-400">1 (1.17)</span></p>
-                    <p class="text-gray-300">Spurs vs Manchester Blue <span class="float-right text-emerald-400">1 (1.45)</span></p>
+                <div class="bg-[#1a3a32] p-3 rounded-lg border-l-4 border-emerald-500 text-[11px] shadow-sm">
+                    <div class="flex justify-between font-bold mb-2 text-white"><span>Ticket #1</span> <span class="text-emerald-400">Cote: 2.44</span></div>
+                    <p class="text-gray-300">Bournemouth vs Fulham <span class="float-right text-emerald-400 font-bold">1 (1.44)</span></p>
+                    <p class="text-gray-300 py-1">West Ham vs Leeds <span class="float-right text-emerald-400 font-bold">1 (1.17)</span></p>
+                    <p class="text-gray-300">Spurs vs Manchester Blue <span class="float-right text-emerald-400 font-bold">1 (1.45)</span></p>
                 </div>
-                <div class="bg-[#1a3a32] p-3 rounded-lg border-l-4 border-emerald-500 text-[10px]">
-                    <div class="flex justify-between font-bold mb-2"><span>Ticket #2</span> <span class="text-emerald-400">Cote: 2.81</span></div>
-                    <p class="text-gray-300">Bournemouth vs Fulham <span class="float-right text-emerald-400">1 (1.44)</span></p>
-                    <p class="text-gray-300">West Ham vs Leeds <span class="float-right text-emerald-400">1 (1.17)</span></p>
-                    <p class="text-gray-300">C. Palace vs Liverpool <span class="float-right text-emerald-400">2 (1.67)</span></p>
-                </div>
-                <div class="bg-[#1a3a32] p-3 rounded-lg border-l-4 border-emerald-500 text-[10px]">
-                    <div class="flex justify-between font-bold mb-2"><span>Ticket #3</span> <span class="text-emerald-400">Cote: 3.49</span></div>
-                    <p class="text-gray-300">Spurs vs Manchester Blue <span class="float-right text-emerald-400">1 (1.45)</span></p>
-                    <p class="text-gray-300">Bournemouth vs Fulham <span class="float-right text-emerald-400">1 (1.44)</span></p>
-                    <p class="text-gray-300">C. Palace vs Liverpool <span class="float-right text-emerald-400">2 (1.67)</span></p>
+                <div class="bg-[#1a3a32] p-3 rounded-lg border-l-4 border-emerald-500 text-[11px] shadow-sm">
+                    <div class="flex justify-between font-bold mb-2 text-white"><span>Ticket #2</span> <span class="text-emerald-400">Cote: 2.81</span></div>
+                    <p class="text-gray-300">Bournemouth vs Fulham <span class="float-right text-emerald-400 font-bold">1 (1.44)</span></p>
+                    <p class="text-gray-300">C. Palace vs Liverpool <span class="float-right text-emerald-400 font-bold">2 (1.67)</span></p>
                 </div>
             </div>
         </div>
 
-        <div class="bg-[#3d1a22] rounded-2xl p-4 border border-red-900/50 animate-fade">
-            <h3 class="text-red-400 font-bold text-[10px] mb-4 uppercase italic"><i class="fas fa-chart-line mr-2"></i>COTE CIBLE +10 (Risque Élevé)</h3>
+        <div class="bg-[#3d1a22] rounded-2xl p-4 border border-red-900/50 animate-fade shadow-lg">
+            <h3 class="text-red-400 font-bold text-[11px] mb-4 uppercase italic tracking-wider"><i class="fas fa-chart-line mr-2"></i>Cote Cible +10</h3>
             <div class="space-y-3">
-                <div class="bg-[#4d1f28] p-4 rounded-xl flex justify-between items-center border border-red-800/30">
-                    <div class="text-[10px]">
-                        <p class="font-bold text-white uppercase">West Ham vs Leeds</p>
-                        <p class="text-yellow-500 italic">Score Exact: 4-1</p>
+                <div class="bg-[#4d1f28] p-4 rounded-xl flex justify-between items-center border border-red-800/30 shadow-md">
+                    <div class="text-[11px]">
+                        <p class="font-bold text-white uppercase tracking-tight">West Ham vs Leeds</p>
+                        <p class="text-yellow-500 italic font-semibold">Score Exact: 4-1</p>
                     </div>
-                    <div class="bg-red-600 px-3 py-1 rounded-lg font-black text-lg">19.44</div>
+                    <div class="bg-red-600 px-3 py-1 rounded-lg font-black text-lg shadow-inner">19.44</div>
                 </div>
-                <div class="bg-[#4d1f28] p-4 rounded-xl flex justify-between items-center border border-red-800/30">
-                    <div class="text-[10px]">
-                        <p class="font-bold text-white uppercase">Newcastle vs Brentford</p>
-                        <p class="text-yellow-500 italic">Score Exact: 4-1</p>
+                <div class="bg-[#4d1f28] p-4 rounded-xl flex justify-between items-center border border-red-800/30 shadow-md">
+                    <div class="text-[11px]">
+                        <p class="font-bold text-white uppercase tracking-tight">Newcastle vs Brentford</p>
+                        <p class="text-yellow-500 italic font-semibold">Score Exact: 4-1</p>
                     </div>
-                    <div class="bg-red-600 px-3 py-1 rounded-lg font-black text-lg">13.10</div>
-                </div>
-                <div class="bg-[#4d1f28] p-4 rounded-xl flex justify-between items-center border border-red-800/30">
-                    <div class="text-[10px]">
-                        <p class="font-bold text-white uppercase">London Reds vs Sunderland</p>
-                        <p class="text-yellow-500 italic">Score Exact: 4-1</p>
-                    </div>
-                    <div class="bg-red-600 px-3 py-1 rounded-lg font-black text-lg">20.24</div>
+                    <div class="bg-red-600 px-3 py-1 rounded-lg font-black text-lg shadow-inner">13.10</div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // HISTORIQUE
+        function handleHistFiles(input) {
+            const preview = document.getElementById('histPreview');
+            Array.from(input.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const div = document.createElement('div');
+                    div.className = "w-16 h-16 rounded-lg overflow-hidden border border-gray-700 relative shadow-md";
+                    div.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover"><button onclick="this.parentElement.remove()" class="absolute top-0 right-0 bg-red-600 text-white text-[8px] px-1 rounded-bl">X</button>`;
+                    preview.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        function saveHistory() {
+            const btn = document.getElementById('btnSaveHist');
+            btn.innerHTML = "Sauvegarde...";
+            setTimeout(() => { btn.innerHTML = "Sauvegardé!"; btn.classList.replace('bg-[#363f54]', 'bg-emerald-600'); }, 1000);
+        }
+
+        // PREVIEW ANALYSE
         function previewAnal(input) {
             if(input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    document.getElementById('analPreview').innerHTML = `
-                        <div class="rounded-xl overflow-hidden border border-yellow-500/30 bg-black/20 p-2">
-                            <img src="${e.target.result}" class="w-full h-24 object-cover opacity-60">
-                        </div>`;
+                    document.getElementById('analPreview').innerHTML = `<div class="p-2 border border-yellow-500/30 rounded-xl bg-yellow-500/5 text-[10px] text-center text-yellow-500 font-bold italic">IMAGE CHARGÉE - PRÊT POUR L'ANALYSE</div>`;
                 };
                 reader.readAsDataURL(input.files[0]);
             }
         }
 
+        // START ANALYSE
         function startAIAnalyse() {
             const btn = document.getElementById('btnMainAnal');
-            const leraValue = document.getElementById('matchTime').value;
-            
-            if(!document.getElementById('analInput').files[0]) return alert("Ampidiro ny sary vao manao analyse!");
+            const lera = document.getElementById('matchTime').value;
+            if(!document.getElementById('analInput').files[0]) return alert("Veuillez uploader une image d'abord!");
 
             btn.disabled = true;
             btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> ANALYSE EN COURS...`;
 
             setTimeout(() => {
-                document.getElementById('resLera').innerText = leraValue;
+                document.getElementById('resLera').innerText = lera;
                 document.getElementById('resultsContainer').classList.remove('hidden');
                 btn.innerHTML = `<i class="fas fa-check mr-2"></i> ANALYSE TERMINÉE`;
                 btn.classList.replace('bg-yellow-gold', 'bg-emerald-500');
