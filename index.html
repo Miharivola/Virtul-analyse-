@@ -26,27 +26,10 @@
     </div>
 
     <div class="flex overflow-x-auto gap-4 mb-8 text-[10px] uppercase font-bold text-gray-500 border-b border-gray-800 pb-2">
-        <span class="whitespace-nowrap"><i class="fas fa-bolt"></i> TIPS</span>
-        <span class="bg-yellow-gold text-black px-3 py-1 rounded-full whitespace-nowrap"><i class="fas fa-play-circle"></i> BEST LIVE</span>
-        <span class="whitespace-nowrap"><i class="fas fa-gem"></i> VIP</span>
-        <span class="whitespace-nowrap"><i class="fas fa-poll"></i> RESULTS</span>
-    </div>
-
-    <div class="card-bg rounded-2xl p-4 shadow-lg mb-6">
-        <div class="flex items-center gap-3 mb-4">
-            <span class="bg-emerald-500 text-black w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm">1</span>
-            <h2 class="font-semibold text-sm text-gray-200">Historique (Upload)</h2>
-        </div>
-        <div onclick="document.getElementById('histInput').click()" class="border-dashed-custom rounded-xl p-6 text-center mb-4 cursor-pointer">
-            <i class="fas fa-cloud-upload-alt text-3xl text-gray-500 mb-2"></i>
-            <p class="text-xs text-gray-400">Cliquez ou glissez vos images</p>
-            <p class="text-[8px] text-gray-500">PNG, JPG (MAX 5 IMAGES)</p>
-            <input type="file" id="histInput" class="hidden" multiple onchange="handleHistFiles(this)">
-        </div>
-        <div id="histPreview" class="flex flex-wrap gap-2 mb-4"></div>
-        <button onclick="saveHistory()" id="btnSaveHist" class="w-full bg-[#363f54] py-3 rounded-xl text-xs font-bold text-gray-300">
-            <i class="fas fa-save mr-2"></i> Sauvegarder historique
-        </button>
+        <span><i class="fas fa-bolt"></i> TIPS</span>
+        <span class="bg-yellow-gold text-black px-3 py-1 rounded-full"><i class="fas fa-play-circle"></i> BEST LIVE</span>
+        <span><i class="fas fa-gem"></i> VIP</span>
+        <span><i class="fas fa-poll"></i> RESULTS</span>
     </div>
 
     <div class="card-bg rounded-2xl p-4 shadow-lg border border-gray-800 mb-8">
@@ -57,22 +40,15 @@
         <div onclick="document.getElementById('analInput').click()" class="border-dashed-custom rounded-xl p-8 text-center mb-4 cursor-pointer">
             <i class="far fa-image text-3xl text-gray-500 mb-3"></i>
             <p class="text-xs text-gray-400 font-bold">Uploadez les matchs à analyser</p>
-            <p class="text-[8px] text-gray-500">PNG, JPG (MAX 5 IMAGES)</p>
             <input type="file" id="analInput" class="hidden" onchange="previewAnal(this)">
         </div>
         <div id="analPreview" class="mb-4"></div>
 
-        <div onclick="openModal()" class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm mb-3 flex justify-between cursor-pointer">
+        <div class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm mb-3 flex justify-between">
             <span id="lgSelected">English League</span> <i class="fas fa-chevron-down text-gray-500"></i>
         </div>
         
-        <div class="relative mb-6">
-            <select id="matchTime" class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm text-white outline-none appearance-none">
-                <option value="20:38">20:38</option>
-                <option value="11:01 AM">11:01 AM</option>
-            </select>
-            <i class="fas fa-chevron-down absolute right-4 top-4 text-gray-500 text-[10px]"></i>
-        </div>
+        <input type="time" id="matchTime" value="20:38" class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm text-white mb-6 outline-none">
 
         <button id="btnMainAnal" onclick="startAIAnalyse()" class="w-full bg-yellow-gold py-4 rounded-xl text-black font-black text-sm shadow-xl">
              Lancer l'analyse (1 Token)
@@ -81,106 +57,88 @@
 
     <div id="resultsContainer" class="hidden space-y-6">
         <div class="bg-emerald-900/20 border border-emerald-500/50 p-3 rounded-xl text-center text-[10px] font-bold text-emerald-400">
-            Analyse effectuée avec succès! (Jereo eto ambany)
+            ANALYSE TERMINÉE AVEC SUCCÈS !
         </div>
 
         <div class="card-bg rounded-2xl p-4 border-t-4 border-emerald-500 animate-fade">
             <div class="flex justify-between items-center mb-4 text-[10px] font-bold">
-                <span class="text-gray-400 uppercase tracking-widest">English League</span>
-                <span class="text-emerald-400 font-bold"><i class="fas fa-chart-line mr-1"></i> 85% Confiance</span>
-                <span class="bg-red-600 px-2 py-0.5 rounded text-white">HOT MATCH</span>
+                <span class="text-gray-400">English League</span>
+                <span class="text-emerald-400">85% Confiance</span>
+                <span class="bg-red-600 px-2 py-0.5 rounded">HOT MATCH</span>
             </div>
             <div class="flex justify-around items-center font-black mb-6 text-sm italic">
-                <span class="w-1/3 text-center">WEST HAM</span> 
-                <span class="text-gray-600 text-xs">VS</span> 
-                <span class="w-1/3 text-center">LEEDS</span>
+                <span>WEST HAM</span> <span class="text-gray-600 text-xs">VS</span> <span>LEEDS</span>
             </div>
-            <div class="grid grid-cols-2 gap-y-4 gap-x-8 text-[11px] border-t border-gray-800 pt-4">
+            <div class="grid grid-cols-2 gap-x-8 gap-y-3 text-[11px] border-t border-gray-800 pt-4">
                 <div class="flex justify-between"><span>1X2:</span> <span class="text-emerald-400 font-bold">1</span></div>
                 <div class="flex justify-between"><span>Score Exact:</span> <span class="text-yellow-500 font-bold">2-0</span></div>
+                <div class="flex justify-between"><span>Lera:</span> <span id="resLera" class="font-bold"></span></div>
+                <div class="flex justify-between"><span>BTTS:</span> <span class="text-red-500">No</span></div>
                 <div class="flex justify-between"><span>O/U 2.5:</span> <span class="text-emerald-400">Over</span></div>
-                <div class="flex justify-between"><span>BTTS:</span> <span class="text-red-500 font-bold">No</span></div>
                 <div class="flex justify-between"><span>HT/FT:</span> <span class="text-emerald-400">1/1</span></div>
-                <div class="flex justify-between"><span>Total Buts:</span> <span class="font-bold text-white">3</span></div>
             </div>
         </div>
 
         <div class="bg-[#0f2d26] rounded-2xl p-4 border border-emerald-900/50 animate-fade">
-            <h3 class="text-emerald-400 font-bold text-[10px] mb-3 uppercase italic"><i class="fas fa-shield-alt mr-2"></i>Multiple VIP</h3>
-            <div class="space-y-3">
-                <div class="bg-[#1a3a32] p-3 rounded-lg border-l-4 border-emerald-500 text-[11px]">
-                    <div class="flex justify-between mb-2"><span>Ticket #1</span> <span class="font-bold text-emerald-400">Cote: 2.44</span></div>
+            <h3 class="text-emerald-400 font-bold text-[10px] mb-4 uppercase italic"><i class="fas fa-shield-alt mr-2"></i>MULTIPLE VIP</h3>
+            <div class="space-y-4">
+                <div class="bg-[#1a3a32] p-3 rounded-lg border-l-4 border-emerald-500 text-[10px]">
+                    <div class="flex justify-between font-bold mb-2"><span>Ticket #1</span> <span class="text-emerald-400">Cote: 2.44</span></div>
                     <p class="text-gray-300">Bournemouth vs Fulham <span class="float-right text-emerald-400">1 (1.44)</span></p>
                     <p class="text-gray-300">West Ham vs Leeds <span class="float-right text-emerald-400">1 (1.17)</span></p>
                     <p class="text-gray-300">Spurs vs Manchester Blue <span class="float-right text-emerald-400">1 (1.45)</span></p>
+                </div>
+                <div class="bg-[#1a3a32] p-3 rounded-lg border-l-4 border-emerald-500 text-[10px]">
+                    <div class="flex justify-between font-bold mb-2"><span>Ticket #2</span> <span class="text-emerald-400">Cote: 2.81</span></div>
+                    <p class="text-gray-300">Bournemouth vs Fulham <span class="float-right text-emerald-400">1 (1.44)</span></p>
+                    <p class="text-gray-300">West Ham vs Leeds <span class="float-right text-emerald-400">1 (1.17)</span></p>
+                    <p class="text-gray-300">C. Palace vs Liverpool <span class="float-right text-emerald-400">2 (1.67)</span></p>
+                </div>
+                <div class="bg-[#1a3a32] p-3 rounded-lg border-l-4 border-emerald-500 text-[10px]">
+                    <div class="flex justify-between font-bold mb-2"><span>Ticket #3</span> <span class="text-emerald-400">Cote: 3.49</span></div>
+                    <p class="text-gray-300">Spurs vs Manchester Blue <span class="float-right text-emerald-400">1 (1.45)</span></p>
+                    <p class="text-gray-300">Bournemouth vs Fulham <span class="float-right text-emerald-400">1 (1.44)</span></p>
+                    <p class="text-gray-300">C. Palace vs Liverpool <span class="float-right text-emerald-400">2 (1.67)</span></p>
                 </div>
             </div>
         </div>
 
         <div class="bg-[#3d1a22] rounded-2xl p-4 border border-red-900/50 animate-fade">
-            <h3 class="text-red-400 font-bold text-[10px] mb-3 uppercase italic"><i class="fas fa-chart-line mr-2"></i>Cote Cible +10 (Risque Élevé)</h3>
-            <div class="space-y-2">
+            <h3 class="text-red-400 font-bold text-[10px] mb-4 uppercase italic"><i class="fas fa-chart-line mr-2"></i>COTE CIBLE +10 (Risque Élevé)</h3>
+            <div class="space-y-3">
                 <div class="bg-[#4d1f28] p-4 rounded-xl flex justify-between items-center border border-red-800/30">
-                    <div class="text-[11px]">
-                        <p class="font-bold uppercase text-white">West Ham vs Leeds</p>
+                    <div class="text-[10px]">
+                        <p class="font-bold text-white uppercase">West Ham vs Leeds</p>
                         <p class="text-yellow-500 italic">Score Exact: 4-1</p>
                     </div>
                     <div class="bg-red-600 px-3 py-1 rounded-lg font-black text-lg">19.44</div>
                 </div>
                 <div class="bg-[#4d1f28] p-4 rounded-xl flex justify-between items-center border border-red-800/30">
-                    <div class="text-[11px]">
-                        <p class="font-bold uppercase text-white">Newcastle vs Brentford</p>
+                    <div class="text-[10px]">
+                        <p class="font-bold text-white uppercase">Newcastle vs Brentford</p>
                         <p class="text-yellow-500 italic">Score Exact: 4-1</p>
                     </div>
                     <div class="bg-red-600 px-3 py-1 rounded-lg font-black text-lg">13.10</div>
+                </div>
+                <div class="bg-[#4d1f28] p-4 rounded-xl flex justify-between items-center border border-red-800/30">
+                    <div class="text-[10px]">
+                        <p class="font-bold text-white uppercase">London Reds vs Sunderland</p>
+                        <p class="text-yellow-500 italic">Score Exact: 4-1</p>
+                    </div>
+                    <div class="bg-red-600 px-3 py-1 rounded-lg font-black text-lg">20.24</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="lgModal" class="fixed inset-0 bg-black/90 hidden z-50 flex items-center justify-center p-6">
-        <div class="bg-[#252b39] w-full max-w-xs rounded-3xl border border-gray-700 overflow-hidden">
-            <div class="p-4 border-b border-gray-800 font-bold text-center">Ligue</div>
-            <div class="max-h-60 overflow-y-auto">
-                <div class="p-4 hover:bg-gray-800 cursor-pointer flex justify-between items-center" onclick="selectLigue('English League')">English League <i class="far fa-circle text-gray-600"></i></div>
-                <div class="p-4 hover:bg-gray-800 cursor-pointer flex justify-between items-center" onclick="selectLigue('Champions League')">Champions League <i class="far fa-circle text-gray-600"></i></div>
-                <div class="p-4 hover:bg-gray-800 cursor-pointer flex justify-between items-center" onclick="selectLigue('Africa Cup')">Africa Cup <i class="far fa-circle text-gray-600"></i></div>
-                <div class="p-4 hover:bg-gray-800 cursor-pointer flex justify-between items-center" onclick="selectLigue('Italian League')">Italian League <i class="far fa-circle text-gray-600"></i></div>
-                <div class="p-4 hover:bg-gray-800 cursor-pointer flex justify-between items-center" onclick="selectLigue('Spanish League')">Spanish League <i class="far fa-circle text-gray-600"></i></div>
-            </div>
-            <button onclick="closeModal()" class="w-full bg-yellow-500 text-black py-3 font-bold">OK</button>
-        </div>
-    </div>
-
     <script>
-        function handleHistFiles(input) {
-            const preview = document.getElementById('histPreview');
-            Array.from(input.files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const div = document.createElement('div');
-                    div.className = "w-20 h-20 rounded-lg overflow-hidden border border-gray-700 relative";
-                    div.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover"><button onclick="this.parentElement.remove()" class="absolute top-0 right-0 bg-red-600 text-white text-[10px] px-1 rounded-bl-lg">X</button>`;
-                    preview.appendChild(div);
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-
-        function saveHistory() {
-            const btn = document.getElementById('btnSaveHist');
-            btn.innerHTML = "Sauvegarde...";
-            setTimeout(() => { btn.innerHTML = "Sauvegardé!"; btn.classList.replace('bg-[#363f54]', 'bg-emerald-600'); }, 1000);
-        }
-
         function previewAnal(input) {
             if(input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     document.getElementById('analPreview').innerHTML = `
-                        <div class="relative rounded-xl overflow-hidden border border-yellow-500/50">
-                            <img src="${e.target.result}" class="w-full h-24 object-cover opacity-50">
-                            <div class="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-yellow-500">SARY VONONA</div>
+                        <div class="rounded-xl overflow-hidden border border-yellow-500/30 bg-black/20 p-2">
+                            <img src="${e.target.result}" class="w-full h-24 object-cover opacity-60">
                         </div>`;
                 };
                 reader.readAsDataURL(input.files[0]);
@@ -189,12 +147,15 @@
 
         function startAIAnalyse() {
             const btn = document.getElementById('btnMainAnal');
-            if(!document.getElementById('analInput').files[0]) return alert("Ampidiro ny sary!");
+            const leraValue = document.getElementById('matchTime').value;
+            
+            if(!document.getElementById('analInput').files[0]) return alert("Ampidiro ny sary vao manao analyse!");
 
             btn.disabled = true;
             btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> ANALYSE EN COURS...`;
 
             setTimeout(() => {
+                document.getElementById('resLera').innerText = leraValue;
                 document.getElementById('resultsContainer').classList.remove('hidden');
                 btn.innerHTML = `<i class="fas fa-check mr-2"></i> ANALYSE TERMINÉE`;
                 btn.classList.replace('bg-yellow-gold', 'bg-emerald-500');
@@ -202,10 +163,6 @@
                 btn.disabled = false;
             }, 2500);
         }
-
-        function openModal() { document.getElementById('lgModal').classList.remove('hidden'); }
-        function closeModal() { document.getElementById('lgModal').classList.add('hidden'); }
-        function selectLigue(n) { document.getElementById('lgSelected').innerText = n; closeModal(); }
     </script>
 </body>
 </html>
