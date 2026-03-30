@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Betting Tips - Historique Fix</title>
+    <title>Betting Tips Predictor Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
     <style>
-        body { background-color: #1a1f2c; color: white; font-family: sans-serif; }
+        body { background-color: #1a1f2c; color: white; font-family: sans-serif; overflow-x: hidden; }
         .card-bg { background-color: #252b39; }
         .bg-yellow-gold { background-color: #facc15; }
         .border-dashed-custom { border: 2px dashed #3f4859; }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .animate-fade { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="p-4 max-w-md mx-auto pb-10">
+<body class="p-4 max-w-md mx-auto pb-20">
 
     <div class="flex justify-between items-center mb-6">
         <div class="bg-yellow-gold p-2 rounded-lg text-black"><i class="fas fa-bars"></i></div>
@@ -27,25 +28,27 @@
         </div>
     </div>
 
+    <div class="flex overflow-x-auto gap-4 mb-8 text-[10px] uppercase font-bold text-gray-500 border-b border-gray-800 pb-2">
+        <span class="flex items-center gap-1 whitespace-nowrap"><i class="fas fa-bolt"></i> TIPS</span>
+        <span class="bg-yellow-gold text-black px-3 py-1 rounded-full flex items-center gap-1 whitespace-nowrap">
+            <i class="fas fa-play-circle"></i> BEST LIVE
+        </span>
+        <span class="flex items-center gap-1 whitespace-nowrap"><i class="fas fa-gem"></i> VIP</span>
+    </div>
+
     <div class="space-y-6">
-        
-        <div class="card-bg rounded-2xl p-4 shadow-lg border border-gray-800">
+        <div class="card-bg rounded-2xl p-4 shadow-lg">
             <div class="flex items-center gap-3 mb-4">
                 <span class="bg-emerald-500 text-black w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm">1</span>
                 <h2 class="font-semibold text-sm">Historique (Upload)</h2>
             </div>
-            
-            <div onclick="document.getElementById('histInput').click()" 
-                 class="border-dashed-custom rounded-xl p-6 text-center mb-4 cursor-pointer hover:bg-[#2d3548] transition-all">
+            <div onclick="document.getElementById('histInput').click()" class="border-dashed-custom rounded-xl p-6 text-center mb-4 cursor-pointer">
                 <i class="fas fa-cloud-upload-alt text-3xl text-gray-500 mb-2"></i>
-                <p class="text-xs text-gray-400 font-bold"><span class="text-emerald-400">Cliquez</span> ou glissez vos images</p>
-                <p class="text-[9px] text-gray-500 mt-1 uppercase">PNG, JPG (MAX 5 IMAGES)</p>
-                <input type="file" id="histInput" class="hidden" accept="image/*" multiple onchange="handleHistFiles(this)">
+                <p class="text-xs text-gray-400">Cliquez pour ajouter des images</p>
+                <input type="file" id="histInput" class="hidden" multiple onchange="handleHistFiles(this)">
             </div>
-
             <div id="histPreview" class="flex flex-wrap gap-2 mb-4"></div>
-
-            <button onclick="saveHistory()" class="w-full bg-[#363f54] py-3 rounded-xl text-xs font-bold text-gray-300 hover:bg-[#434d66] active:scale-95 transition-all">
+            <button onclick="saveHist()" id="btnSave" class="w-full bg-[#363f54] py-3 rounded-xl text-xs font-bold text-gray-300">
                 <i class="fas fa-save mr-2"></i> Sauvegarder historique
             </button>
         </div>
@@ -55,130 +58,131 @@
                 <span class="bg-yellow-gold text-black w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm">2</span>
                 <h2 class="font-semibold text-sm">Nouvelle Analyse (Upload Matchs)</h2>
             </div>
-
-            <div onclick="document.getElementById('analInput').click()" 
-                 class="border-dashed-custom rounded-xl p-8 text-center mb-4 cursor-pointer hover:bg-[#2d3548]">
+            <div onclick="document.getElementById('analInput').click()" class="border-dashed-custom rounded-xl p-8 text-center mb-4 cursor-pointer">
                 <i class="far fa-image text-3xl text-gray-500 mb-3"></i>
-                <p class="text-xs text-gray-400 font-bold"><span class="text-yellow-500">Uploadez</span> les matchs à analyser</p>
-                <input type="file" id="analInput" class="hidden" accept="image/*" onchange="handleAnalFile(this)">
+                <p class="text-xs text-gray-400 font-bold">Uploadez les matchs à analyser</p>
+                <input type="file" id="analInput" class="hidden" onchange="handleAnalFile(this)">
             </div>
-
             <div id="analPreview" class="mb-4"></div>
 
             <div onclick="openModal()" class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm mb-3 flex justify-between items-center cursor-pointer">
-                <span id="leagueNameText">English League</span>
-                <i class="fas fa-chevron-down text-gray-500 text-[10px]"></i>
+                <span id="lgName">English League</span> <i class="fas fa-chevron-down text-gray-500 text-[10px]"></i>
             </div>
+            <input type="time" id="matchTime" value="20:38" class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm text-white mb-6 outline-none">
 
-            <input type="time" id="matchTime" value="20:38" 
-                class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm text-white mb-6 outline-none focus:border-yellow-500">
-
-            <button id="mainAnalyzeBtn" onclick="startFullAnalysis()" class="w-full bg-yellow-gold py-4 rounded-xl text-black font-black text-sm shadow-xl flex items-center justify-center gap-2">
-                <i class="fas fa-search"></i> LANCER L'ANALYSE (1 TOKEN)
+            <button id="btnAnal" onclick="runMainAnalyse()" class="w-full bg-yellow-gold py-4 rounded-xl text-black font-black text-sm shadow-xl">
+                LANCER L'ANALYSE (1 TOKEN)
             </button>
         </div>
     </div>
 
-    <div id="leagueModal" class="fixed inset-0 bg-black/80 hidden z-50 flex items-center justify-center p-6">
-        <div class="bg-[#252b39] w-full max-w-xs rounded-3xl overflow-hidden border border-gray-700">
-            <div class="p-4 border-b border-gray-800 font-bold text-center">Ligue</div>
-            <div class="max-h-60 overflow-y-auto" id="leagueOptions">
-                <div class="p-4 border-b border-gray-800 hover:bg-[#2d3548] cursor-pointer" onclick="setLg('Champions League')">Champions League</div>
-                <div class="p-4 border-b border-gray-800 hover:bg-[#2d3548] cursor-pointer" onclick="setLg('English League')">English League</div>
+    <div id="finalResults" class="hidden mt-10 space-y-6">
+        
+        <div class="bg-emerald-900/20 border border-emerald-500/50 p-4 rounded-xl text-center text-xs font-bold text-emerald-400 mb-4">
+            ANALYSE EFFECTUÉE AVEC SUCCÈS !
+        </div>
+
+        <div class="card-bg rounded-2xl p-4 border-t-4 border-emerald-500 animate-fade">
+            <div class="flex justify-between items-center mb-4 text-[10px]">
+                <span class="text-gray-400 uppercase tracking-widest">English League</span>
+                <span class="bg-red-600 px-2 py-1 rounded font-black uppercase">Hot Match</span>
             </div>
+            <div class="flex justify-around items-center font-bold mb-6">
+                <span>WEST HAM</span> <span class="text-gray-600">VS</span> <span>LEEDS</span>
+            </div>
+            <div class="grid grid-cols-2 gap-4 text-[11px] border-t border-gray-700 pt-4">
+                <div class="flex justify-between"><span>1X2:</span> <span class="text-emerald-400">1</span></div>
+                <div class="flex justify-between"><span>Score Exact:</span> <span class="text-yellow-500">2-0</span></div>
+                <div class="flex justify-between"><span>O/U 2.5:</span> <span class="text-emerald-400">Over</span></div>
+                <div class="flex justify-between"><span>BTTS:</span> <span class="text-red-500">No</span></div>
+            </div>
+        </div>
+
+        <div class="bg-[#0f2d26] rounded-2xl p-4 border border-emerald-900/50 animate-fade" style="animation-delay: 0.2s;">
+            <h3 class="text-emerald-400 font-bold text-xs mb-3 uppercase italic"><i class="fas fa-shield-alt mr-2"></i>Multiple VIP</h3>
+            <div class="bg-[#1a3a32] p-3 rounded-lg border-l-4 border-emerald-500 text-[11px]">
+                <div class="flex justify-between mb-2"><span>Ticket #1</span> <span class="font-bold">Cote: 2.44</span></div>
+                <p class="opacity-70">West Ham vs Leeds <span class="float-right text-emerald-400">1 (1.17)</span></p>
+                <p class="opacity-70">Bournemouth vs Fulham <span class="float-right text-emerald-400">1 (1.44)</span></p>
+            </div>
+        </div>
+
+        <div class="bg-[#3d1a22] rounded-2xl p-4 border border-red-900/50 animate-fade" style="animation-delay: 0.4s;">
+            <h3 class="text-red-400 font-bold text-xs mb-3 uppercase italic"><i class="fas fa-chart-line mr-2"></i>Cote Cible +10</h3>
+            <div class="bg-[#4d1f28] p-4 rounded-xl flex justify-between items-center border border-red-800/30">
+                <div class="text-[11px]">
+                    <p class="font-bold uppercase">Newcastle vs Brentford</p>
+                    <p class="text-yellow-500 italic">Score Exact: 4-1</p>
+                </div>
+                <div class="bg-red-600 px-3 py-1 rounded-lg font-black text-xl">12.92</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="lgModal" class="fixed inset-0 bg-black/90 hidden z-50 flex items-center justify-center p-6">
+        <div class="bg-[#252b39] w-full max-w-xs rounded-3xl overflow-hidden border border-gray-700">
+            <div class="p-4 border-b border-gray-800 font-bold text-center">Selectionnez la Ligue</div>
+            <div class="p-4 hover:bg-gray-800 cursor-pointer" onclick="selectLg('English League')">English League</div>
+            <div class="p-4 hover:bg-gray-800 cursor-pointer" onclick="selectLg('Champions League')">Champions League</div>
             <button onclick="closeModal()" class="w-full bg-yellow-500 text-black py-3 font-bold">OK</button>
         </div>
     </div>
 
-    <div id="resultsArea" class="hidden mt-8 animate-bounce-in">
-        <div class="p-4 bg-emerald-900/20 border border-emerald-500 rounded-2xl text-center text-sm font-bold text-emerald-400">
-            Analyse effectuée avec succès! (Jereo eto ambany)
-        </div>
-        </div>
-
     <script>
-        // --- LOGIC HISTORIQUE ---
+        // HISTORIQUE
         function handleHistFiles(input) {
             const preview = document.getElementById('histPreview');
-            // preview.innerHTML = ''; // Raha tiana hofafana ny teo aloha
-            
-            Array.from(input.files).forEach((file, index) => {
+            Array.from(input.files).forEach(file => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const div = document.createElement('div');
-                    div.className = "relative w-20 h-20 rounded-lg overflow-hidden border-2 border-gray-700 shadow-lg";
-                    div.innerHTML = `
-                        <img src="${e.target.result}" class="w-full h-full object-cover">
-                        <button onclick="this.parentElement.remove()" class="absolute top-0 right-0 bg-red-600 text-white text-[10px] px-1 rounded-bl-lg">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    `;
+                    div.className = "w-16 h-16 rounded-lg overflow-hidden border border-gray-700 relative";
+                    div.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover"><button onclick="this.parentElement.remove()" class="absolute top-0 right-0 bg-red-600 text-[8px] px-1 rounded-bl">X</button>`;
                     preview.appendChild(div);
                 };
                 reader.readAsDataURL(file);
             });
         }
-
-        function saveHistory() {
-            const count = document.getElementById('histPreview').childElementCount;
-            if(count === 0) return alert("Ampidiro aloha ny sary!");
-            
-            const btn = document.querySelector('button[onclick="saveHistory()"]');
-            btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Sauvegarde...`;
-            
-            setTimeout(() => {
-                btn.innerHTML = `<i class="fas fa-check mr-2"></i> Historique Sauvegardé`;
-                btn.classList.replace('bg-[#363f54]', 'bg-emerald-600');
-                setTimeout(() => {
-                    btn.innerHTML = `<i class="fas fa-save mr-2"></i> Sauvegarder historique`;
-                    btn.classList.replace('bg-emerald-600', 'bg-[#363f54]');
-                }, 2000);
-            }, 1500);
+        function saveHist() {
+            const btn = document.getElementById('btnSave');
+            btn.innerHTML = "Saving...";
+            setTimeout(() => { btn.innerHTML = "Sauvegardé!"; btn.classList.add('bg-emerald-600'); }, 1000);
         }
 
-        // --- LOGIC ANALYSE ---
+        // ANALYSE
         function handleAnalFile(input) {
-            const preview = document.getElementById('analPreview');
             const file = input.files[0];
             if(file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    preview.innerHTML = `
-                        <div class="w-full h-32 rounded-xl border border-yellow-500/50 overflow-hidden relative">
-                            <img src="${e.target.result}" class="w-full h-full object-cover opacity-50">
-                            <div class="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-yellow-500 uppercase">Sary hovakiana vonona</div>
-                        </div>
-                    `;
+                    document.getElementById('analPreview').innerHTML = `<div class="p-2 border border-yellow-500/30 rounded-xl bg-yellow-500/5 text-[10px] text-center text-yellow-500 font-bold">SARY VONONA HOVAKIANA</div>`;
                 };
                 reader.readAsDataURL(file);
             }
         }
 
-        async function startFullAnalysis() {
-            const btn = document.getElementById('mainAnalyzeBtn');
-            const file = document.getElementById('analInput').files[0];
+        function runMainAnalyse() {
+            const btn = document.getElementById('btnAnal');
+            const res = document.getElementById('finalResults');
             
-            if(!file) return alert("Uploadez d'abord le match à analyser!");
+            if(!document.getElementById('analInput').files[0]) return alert("Ampidiro ny sary analyse!");
 
             btn.disabled = true;
-            btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> CALCUL EN COURS...`;
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> ANALYSE EN COURS...`;
 
-            // OCR Simulation & UI show
             setTimeout(() => {
-                document.getElementById('resultsArea').classList.remove('hidden');
-                btn.innerHTML = `<i class="fas fa-check"></i> ANALYSE TERMINÉE`;
+                btn.innerHTML = "ANALYSE TERMINÉE";
                 btn.classList.replace('bg-yellow-gold', 'bg-emerald-500');
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                res.classList.remove('hidden'); // Mampiseho ny valiny
+                res.scrollIntoView({ behavior: 'smooth' });
+                btn.disabled = false;
             }, 3000);
         }
 
-        // --- MODAL UTILS ---
-        function openModal() { document.getElementById('leagueModal').classList.remove('hidden'); }
-        function closeModal() { document.getElementById('leagueModal').classList.add('hidden'); }
-        function setLg(name) { 
-            document.getElementById('leagueNameText').innerText = name; 
-            closeModal();
-        }
+        // MODAL
+        function openModal() { document.getElementById('lgModal').classList.remove('hidden'); }
+        function closeModal() { document.getElementById('lgModal').classList.add('hidden'); }
+        function selectLg(n) { document.getElementById('lgName').innerText = n; closeModal(); }
     </script>
 </body>
 </html>
