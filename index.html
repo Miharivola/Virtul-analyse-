@@ -3,189 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Betting Tips Predictor Pro</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Vital Predictor Premium</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background-color: #1a1f2c; color: white; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
-        .card-bg { background-color: #252b39; }
-        .bg-yellow-gold { background-color: #facc15; }
-        .border-dashed-custom { border: 2px dashed #3f4859; }
-        .animate-fade { animation: fadeIn 0.5s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        select { border: none; outline: none; background: transparent; color: white; }
+        :root {
+            --main-bg: #0d1424;
+            --card-bg: #162136;
+            --accent-gold: #ffc107;
+            --input-bg: #1e293b;
+            --border-color: #2d3748;
+            --text-white: #ffffff;
+            --text-gray: #94a3b8;
+        }
+
+        body {
+            background-color: var(--main-bg);
+            color: var(--text-white);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 80px; /* Spacement ho an'ny bottom nav */
+        }
+
+        /* Header Header */
+        header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .logo-text { font-weight: bold; font-size: 1.2rem; }
+        .flag-mg { width: 25px; border-radius: 50%; }
+
+        /* Menu Horizontale (TIPS, MULTIPLE, sns) */
+        .top-menu {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            padding: 10px;
+            scrollbar-width: none;
+        }
+        .top-menu::-webkit-scrollbar { display: none; }
+        
+        .menu-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-gray);
+            padding: 8px 15px;
+            border-radius: 8px;
+            white-space: nowrap;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .menu-btn.active {
+            background: var(--accent-gold);
+            color: #000;
+            font-weight: bold;
+        }
+
+        /* Section Ligue */
+        .section-title {
+            text-align: center;
+            font-size: 1.1rem;
+            margin: 20px 0 5px;
+        }
+        .section-subtitle {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-gray);
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .league-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            padding: 0 15px;
+        }
+
+        /* Form Card */
+        .analysis-card {
+            margin: 20px 15px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid #1e293b;
+        }
+
+        .form-group { margin-bottom: 15px; }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 11px;
+            color: var(--text-gray);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--accent-gold); }
+
+        .cote-input { border-color: var(--border-color); }
+        .active-input { border-color: var(--accent-gold); }
+
+        /* Nul Cote (X) - Alignment */
+        .nul-row {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        .nul-row .input-container { width: 40%; }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: var(--main-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-item {
+            text-align: center;
+            color: var(--text-gray);
+            font-size: 10px;
+            text-decoration: none;
+        }
+        .nav-item.active { color: var(--accent-gold); }
+        .nav-item i { font-size: 18px; margin-bottom: 4px; display: block; }
+
     </style>
 </head>
-<body class="p-4 max-w-md mx-auto pb-24">
+<body>
 
-    <div class="flex justify-between items-center mb-6">
-        <div class="bg-yellow-gold p-2 rounded-lg text-black"><i class="fas fa-bars"></i></div>
-        <div class="flex items-center gap-3">
-            <div class="bg-[#2d3548] px-3 py-1 rounded-full border border-gray-700 text-xs text-yellow-400">🟡 4959</div>
-            <i class="fas fa-shopping-cart text-yellow-500 text-xl font-bold"></i>
+    <header>
+        <div class="header-left">
+            <i class="fas fa-bars" style="color: var(--accent-gold); font-size: 24px;"></i>
+            <span class="logo-text">vital</span>
         </div>
+        <img src="https://flagcdn.com/w40/mg.png" class="flag-mg" alt="Madagascar">
+    </header>
+
+    <div class="top-menu">
+        <div class="menu-btn"><i class="fas fa-fire"></i> TIPS</div>
+        <div class="menu-btn"><i class="fas fa-check-circle"></i> MULTIPLE</div>
+        <div class="menu-btn active"><i class="fas fa-play-circle"></i> BEST LIVE</div>
+        <div class="menu-btn"><i class="fas fa-search"></i> ANALYSIS</div>
     </div>
 
-    <div class="flex overflow-x-auto gap-4 mb-8 text-[10px] uppercase font-bold text-gray-500 border-b border-gray-800 pb-2">
-        <span><i class="fas fa-bolt"></i> TIPS</span>
-        <span class="bg-yellow-gold text-black px-3 py-1 rounded-full"><i class="fas fa-play-circle"></i> BEST LIVE</span>
-        <span><i class="fas fa-gem"></i> VIP</span>
-        <span><i class="fas fa-poll"></i> RESULTS</span>
+    <h3 class="section-title">② Nouvelle Analyse (Matchs)</h3>
+    <p class="section-subtitle">LIGUE</p>
+
+    <div class="league-grid">
+        <div class="menu-btn">English League</div>
+        <div class="menu-btn">Champions League</div>
+        <div class="menu-btn active">Africa Cup</div>
+        <div class="menu-btn">Italian League</div>
+        <div class="menu-btn">Spanish League</div>
+        <div class="menu-btn">French League</div>
     </div>
 
-    <div class="card-bg rounded-2xl p-4 shadow-lg mb-6 border border-gray-800">
-        <div class="flex items-center gap-3 mb-4">
-            <span class="bg-emerald-500 text-black w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm">1</span>
-            <h2 class="font-semibold text-sm italic">Historique (Upload)</h2>
-        </div>
-        <div onclick="document.getElementById('histInput').click()" class="border-dashed-custom rounded-xl p-6 text-center mb-4 cursor-pointer">
-            <i class="fas fa-cloud-upload-alt text-3xl text-gray-500 mb-2"></i>
-            <p class="text-xs text-gray-400 font-bold">Cliquez pour ajouter des images</p>
-            <input type="file" id="histInput" class="hidden" multiple onchange="handleHistFiles(this)">
-        </div>
-        <div id="histPreview" class="flex flex-wrap gap-2 mb-4"></div>
-        <button onclick="saveHistory()" id="btnSaveHist" class="w-full bg-[#363f54] py-3 rounded-xl text-xs font-bold text-gray-300 shadow-lg">
-            <i class="fas fa-save mr-2"></i> Sauvegarder historique
-        </button>
-    </div>
-
-    <div class="card-bg rounded-2xl p-4 shadow-lg border border-gray-800 mb-8">
-        <div class="flex items-center gap-3 mb-4">
-            <span class="bg-yellow-gold text-black w-6 h-6 rounded-full flex items-center justify-center font-bold text-sm">2</span>
-            <h2 class="font-semibold text-sm italic">Nouvelle Analyse (Upload Matchs)</h2>
-        </div>
-        <div onclick="document.getElementById('analInput').click()" class="border-dashed-custom rounded-xl p-8 text-center mb-4 cursor-pointer">
-            <i class="far fa-image text-3xl text-gray-500 mb-3"></i>
-            <p class="text-xs text-gray-400 font-bold">Uploadez les matchs à analyser</p>
-            <input type="file" id="analInput" class="hidden" onchange="previewAnal(this)">
-        </div>
-        <div id="analPreview" class="mb-4"></div>
-
-        <div class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm mb-3 flex justify-between items-center cursor-pointer">
-            <span>English League</span> <i class="fas fa-chevron-down text-gray-500 text-[10px]"></i>
-        </div>
-        
-        <div class="relative mb-6">
-            <input type="time" id="matchTime" value="20:38" class="w-full bg-[#1a1f2c] border border-gray-700 rounded-xl py-3 px-4 text-sm text-white outline-none focus:border-yellow-500">
-        </div>
-
-        <button id="btnMainAnal" onclick="startAIAnalyse()" class="w-full bg-yellow-gold py-4 rounded-xl text-black font-black text-sm shadow-2xl">
-             LANCER L'ANALYSE (1 TOKEN)
-        </button>
-    </div>
-
-    <div id="resultsContainer" class="hidden space-y-6">
-        <div class="bg-emerald-900/20 border border-emerald-500/50 p-3 rounded-xl text-center text-[10px] font-bold text-emerald-400 tracking-widest">
-            ANALYSE TERMINÉE AVEC SUCCÈS !
-        </div>
-
-        <div class="card-bg rounded-2xl p-4 border-t-4 border-emerald-500 animate-fade shadow-xl">
-            <div class="flex justify-between items-center mb-4 text-[10px] font-bold">
-                <span class="text-gray-400 uppercase">English League</span>
-                <span class="text-emerald-400 tracking-tighter"><i class="fas fa-chart-line mr-1"></i> 85% Confiance</span>
-                <span class="bg-red-600 px-2 py-0.5 rounded text-white shadow-lg">HOT MATCH</span>
-            </div>
-            <div class="flex justify-around items-center font-black mb-6 text-[15px] italic tracking-wide">
-                <span>WEST HAM</span> <span class="text-gray-600 text-xs not-italic">VS</span> <span>LEEDS</span>
-            </div>
-            <div class="grid grid-cols-2 gap-y-4 gap-x-8 text-[11px] border-t border-gray-700 pt-4 font-medium">
-                <div class="flex justify-between"><span>1X2:</span> <span class="text-emerald-400 font-bold">1</span></div>
-                <div class="flex justify-between"><span>Score Exact:</span> <span class="text-yellow-500 font-bold">2-0</span></div>
-                <div class="flex justify-between"><span>Lera:</span> <span id="resLera" class="font-bold text-white"></span></div>
-                <div class="flex justify-between"><span>BTTS:</span> <span class="text-red-500">No</span></div>
-                <div class="flex justify-between"><span>O/U 2.5:</span> <span class="text-emerald-400 font-bold">Over</span></div>
-                <div class="flex justify-between"><span>HT/FT:</span> <span class="text-emerald-400 font-bold">1/1</span></div>
+    <div class="analysis-card">
+        <div class="form-group">
+            <label style="text-align: center;">Heure du Match</label>
+            <div style="position: relative;">
+                <input type="text" placeholder="Selectionner l'heure">
+                <i class="far fa-clock" style="position: absolute; right: 15px; top: 15px; color: var(--text-gray);"></i>
             </div>
         </div>
 
-        <div class="bg-[#0f2d26] rounded-2xl p-4 border border-emerald-900/50 animate-fade shadow-lg">
-            <h3 class="text-emerald-400 font-bold text-[11px] mb-4 uppercase italic tracking-wider"><i class="fas fa-shield-alt mr-2"></i>Multiple VIP Tickets</h3>
-            <div class="space-y-4">
-                <div class="bg-[#1a3a32] p-3 rounded-lg border-l-4 border-emerald-500 text-[11px] shadow-sm">
-                    <div class="flex justify-between font-bold mb-2 text-white"><span>Ticket #1</span> <span class="text-emerald-400">Cote: 2.44</span></div>
-                    <p class="text-gray-300">Bournemouth vs Fulham <span class="float-right text-emerald-400 font-bold">1 (1.44)</span></p>
-                    <p class="text-gray-300 py-1">West Ham vs Leeds <span class="float-right text-emerald-400 font-bold">1 (1.17)</span></p>
-                    <p class="text-gray-300">Spurs vs Manchester Blue <span class="float-right text-emerald-400 font-bold">1 (1.45)</span></p>
-                </div>
-                <div class="bg-[#1a3a32] p-3 rounded-lg border-l-4 border-emerald-500 text-[11px] shadow-sm">
-                    <div class="flex justify-between font-bold mb-2 text-white"><span>Ticket #2</span> <span class="text-emerald-400">Cote: 2.81</span></div>
-                    <p class="text-gray-300">Bournemouth vs Fulham <span class="float-right text-emerald-400 font-bold">1 (1.44)</span></p>
-                    <p class="text-gray-300">C. Palace vs Liverpool <span class="float-right text-emerald-400 font-bold">2 (1.67)</span></p>
-                </div>
+        <div class="form-row">
+            <div>
+                <label>Équipe Domicile (1)</label>
+                <input type="text" value="DR Congo">
+            </div>
+            <div>
+                <label>Cote Domicile (1)</label>
+                <input type="text" class="active-input" placeholder="Ex: 2.15" style="border-color: var(--accent-gold);">
             </div>
         </div>
 
-        <div class="bg-[#3d1a22] rounded-2xl p-4 border border-red-900/50 animate-fade shadow-lg">
-            <h3 class="text-red-400 font-bold text-[11px] mb-4 uppercase italic tracking-wider"><i class="fas fa-chart-line mr-2"></i>Cote Cible +10</h3>
-            <div class="space-y-3">
-                <div class="bg-[#4d1f28] p-4 rounded-xl flex justify-between items-center border border-red-800/30 shadow-md">
-                    <div class="text-[11px]">
-                        <p class="font-bold text-white uppercase tracking-tight">West Ham vs Leeds</p>
-                        <p class="text-yellow-500 italic font-semibold">Score Exact: 4-1</p>
-                    </div>
-                    <div class="bg-red-600 px-3 py-1 rounded-lg font-black text-lg shadow-inner">19.44</div>
-                </div>
-                <div class="bg-[#4d1f28] p-4 rounded-xl flex justify-between items-center border border-red-800/30 shadow-md">
-                    <div class="text-[11px]">
-                        <p class="font-bold text-white uppercase tracking-tight">Newcastle vs Brentford</p>
-                        <p class="text-yellow-500 italic font-semibold">Score Exact: 4-1</p>
-                    </div>
-                    <div class="bg-red-600 px-3 py-1 rounded-lg font-black text-lg shadow-inner">13.10</div>
-                </div>
+        <div class="nul-row">
+            <div class="input-container">
+                <label>Cote Nul (X)</label>
+                <input type="text" placeholder="Ex: 3.40">
+            </div>
+        </div>
+
+        <div class="form-row" style="margin-top: 15px;">
+            <div>
+                <label>Équipe Extérieur (2)</label>
+                <input type="text" value="Ivory Coast">
+            </div>
+            <div>
+                <label>Cote Extérieur (2)</label>
+                <input type="text" placeholder="Ex: 4.20">
             </div>
         </div>
     </div>
 
-    <script>
-        // HISTORIQUE
-        function handleHistFiles(input) {
-            const preview = document.getElementById('histPreview');
-            Array.from(input.files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const div = document.createElement('div');
-                    div.className = "w-16 h-16 rounded-lg overflow-hidden border border-gray-700 relative shadow-md";
-                    div.innerHTML = `<img src="${e.target.result}" class="w-full h-full object-cover"><button onclick="this.parentElement.remove()" class="absolute top-0 right-0 bg-red-600 text-white text-[8px] px-1 rounded-bl">X</button>`;
-                    preview.appendChild(div);
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-        function saveHistory() {
-            const btn = document.getElementById('btnSaveHist');
-            btn.innerHTML = "Sauvegarde...";
-            setTimeout(() => { btn.innerHTML = "Sauvegardé!"; btn.classList.replace('bg-[#363f54]', 'bg-emerald-600'); }, 1000);
-        }
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active"><i class="fas fa-fire"></i>VIRTUEL</a>
+        <a href="#" class="nav-item"><i class="fas fa-plane"></i>AVIATOR</a>
+        <a href="#" class="nav-item"><i class="fas fa-gem"></i>VIP</a>
+        <a href="#" class="nav-item"><i class="fas fa-bars"></i>MENU</a>
+    </nav>
 
-        // PREVIEW ANALYSE
-        function previewAnal(input) {
-            if(input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('analPreview').innerHTML = `<div class="p-2 border border-yellow-500/30 rounded-xl bg-yellow-500/5 text-[10px] text-center text-yellow-500 font-bold italic">IMAGE CHARGÉE - PRÊT POUR L'ANALYSE</div>`;
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        // START ANALYSE
-        function startAIAnalyse() {
-            const btn = document.getElementById('btnMainAnal');
-            const lera = document.getElementById('matchTime').value;
-            if(!document.getElementById('analInput').files[0]) return alert("Veuillez uploader une image d'abord!");
-
-            btn.disabled = true;
-            btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> ANALYSE EN COURS...`;
-
-            setTimeout(() => {
-                document.getElementById('resLera').innerText = lera;
-                document.getElementById('resultsContainer').classList.remove('hidden');
-                btn.innerHTML = `<i class="fas fa-check mr-2"></i> ANALYSE TERMINÉE`;
-                btn.classList.replace('bg-yellow-gold', 'bg-emerald-500');
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-                btn.disabled = false;
-            }, 2500);
-        }
-    </script>
 </body>
 </html>
