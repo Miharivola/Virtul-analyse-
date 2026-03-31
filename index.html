@@ -3,187 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vital Predictor Pro</title>
+    <title>Vital Predictor AI - Image Analysis</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --bg: #0d1424;
+            --bg: #0b1120;
             --card: #162136;
             --gold: #ffc107;
             --input: #1e293b;
-            --border: #2d3748;
-            --text-w: #ffffff;
             --text-g: #94a3b8;
+            --accent-green: #2dd4bf;
         }
 
         body {
             background-color: var(--bg);
-            color: var(--text-w);
-            font-family: 'Roboto', sans-serif;
-            margin: 0; padding: 10px;
-            padding-bottom: 90px;
+            color: #fff;
+            font-family: sans-serif;
+            margin: 0; padding: 15px;
+            padding-bottom: 100px;
         }
 
-        /* Utility */
-        .clickable { cursor: pointer; transition: 0.2s; }
-        .clickable:active { transform: scale(0.95); opacity: 0.8; }
-
-        /* Top Menu */
-        .top-nav {
-            display: flex; gap: 8px; overflow-x: auto;
-            padding: 10px 0; scrollbar-width: none;
-        }
-        .btn-top {
-            background: var(--card); border: 1px solid var(--border);
-            color: var(--text-g); padding: 8px 14px; border-radius: 8px;
-            white-space: nowrap; font-size: 13px; font-weight: 500;
-        }
-        .btn-top.active { background: var(--gold); color: #000; border: none; }
-
-        /* Historique Section */
-        .historique-card {
-            background: var(--card); border-radius: 12px;
-            padding: 15px; margin-top: 10px; border: 1px solid #202b3e;
-        }
-        .text-area-box {
-            background: var(--input); border-radius: 8px;
-            padding: 15px; color: var(--text-g); font-family: monospace;
-            min-height: 100px; margin-top: 10px; border: 1px solid var(--border);
-        }
-        .save-btn {
-            background: #25334a; color: var(--text-w); width: 100%;
-            padding: 12px; border-radius: 8px; border: none;
-            margin-top: 10px; font-weight: bold; display: flex;
-            align-items: center; justify-content: center; gap: 10px;
+        /* Box hanehoana ny sary nampidirina */
+        .upload-zone {
+            border: 2px dashed #2d3748;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            background: var(--card);
+            margin-bottom: 20px;
+            cursor: pointer;
         }
 
-        /* League Grid */
-        .league-grid {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 10px; margin: 15px 0;
-        }
-        .btn-league {
-            background: var(--card); border: 1px solid var(--border);
-            color: var(--text-w); padding: 10px; border-radius: 8px;
-            text-align: center; font-size: 13px;
-        }
-        .btn-league.active { background: var(--gold); color: #000; border: none; font-weight: bold; }
+        .upload-zone i { font-size: 30px; color: var(--gold); margin-bottom: 10px; }
 
-        /* Main Form */
-        .form-card {
-            background: var(--card); padding: 15px; border-radius: 12px;
+        /* Graphique kely boribory */
+        .stats-circle {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            border: 5px solid var(--border);
+            display: flex; align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-weight: bold;
+            border-top-color: var(--accent-green); /* Hoatran'ny loading */
         }
-        .row { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 10px; margin-bottom: 12px; }
-        label { display: block; font-size: 11px; color: var(--text-g); margin-bottom: 5px; text-transform: uppercase; }
-        input {
-            width: 100%; background: var(--input); border: 1.5px solid var(--border);
-            padding: 12px; border-radius: 8px; color: white; box-sizing: border-box;
-        }
-        input:focus { border-color: var(--gold); outline: none; }
 
-        /* Bottom Nav */
-        .bottom-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: var(--bg); display: flex; justify-content: space-around;
-            padding: 15px 0; border-top: 1px solid var(--border);
+        .result-panel {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 1px solid var(--gold);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none; /* Hipetraka rehefa vita ny analyse */
         }
-        .nav-link { text-align: center; color: var(--text-g); text-decoration: none; font-size: 10px; }
-        .nav-link.active { color: var(--gold); }
-        .nav-link i { display: block; font-size: 20px; margin-bottom: 3px; }
 
+        .btn-action {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <div class="top-nav">
-        <div class="btn-top clickable"><i class="fas fa-fire"></i> TIPS</div>
-        <div class="btn-top clickable"><i class="fas fa-check"></i> MULTIPLE</div>
-        <div class="btn-top active clickable"><i class="fas fa-play-circle"></i> BEST LIVE</div>
-        <div class="btn-top clickable"><i class="fas fa-chart-bar"></i> ANALYSIS</div>
+    <h3 style="text-align: center;">AI HISTORY ANALYZER</h3>
+
+    <div class="upload-zone" onclick="document.getElementById('file-input').click()">
+        <i class="fas fa-camera"></i><br>
+        <span>AMPIDIRO NY CAPTURE (HISTORIQUE)</span>
+        <input type="file" id="file-input" style="display:none" accept="image/*" onchange="previewImage(event)">
     </div>
 
-    <div class="historique-card">
-        <h4 style="margin: 0; font-size: 16px;"><span style="color: #2dd4bf;">1</span> Historique (Texte)</h4>
-        <div class="text-area-box">
-            Exemple:<br>
-            Team A 2-1 Team B<br>
-            Team C 0-0 Team D
-        </div>
-        <button class="save-btn clickable">
-            <i class="fas fa-save"></i> Sauvegarder historique
-        </button>
+    <div id="preview-container" style="display:none; text-align:center; margin-bottom: 20px;">
+        <img id="img-preview" style="max-width: 100%; border-radius: 8px; border: 2px solid var(--gold);">
+        <p style="font-size: 12px; color: var(--text-g);">Sary vonona hovakiana...</p>
     </div>
 
-    <h4 style="text-align: center; margin-top: 25px;">② Nouvelle Analyse (Matchs)</h4>
-    <p style="text-align: center; font-size: 11px; color: var(--text-g);">LIGUE</p>
+    <button class="btn-action" style="background: var(--gold); color: #000;" onclick="lancerAnalyse()">
+        <i class="fas fa-bolt"></i> Lancer l'Analyse AI
+    </button>
 
-    <div class="league-grid">
-        <div class="btn-league clickable">English League</div>
-        <div class="btn-league clickable">Champions League</div>
-        <div class="btn-league active clickable">Africa Cup</div>
-        <div class="btn-league clickable">Italian League</div>
-        <div class="btn-league clickable">Spanish League</div>
-        <div class="btn-league clickable">French League</div>
-    </div>
-
-    <div class="form-card">
-        <div style="margin-bottom: 15px;">
-            <label style="text-align: center;">Heure du Match</label>
-            <input type="time" value="19:45">
-        </div>
-
-        <div class="row">
-            <div>
-                <label>Équipe Domicile (1)</label>
-                <input type="text" value="DR Congo">
+    <div id="result-panel" class="result-panel">
+        <h4 style="text-align:center; margin-top:0; color:var(--gold)">VOKATRY NY ANALYSE</h4>
+        
+        <div style="display: flex; justify-content: space-around; align-items: center;">
+            <div style="text-align:center">
+                <div class="stats-circle" style="border-top-color: var(--accent-green);">82%</div>
+                <p style="font-size: 11px; margin-top: 5px;">PROBABILITÉ WIN</p>
             </div>
-            <div>
-                <label>Cote Domicile (1)</label>
-                <input type="text" value="2.15" style="border-color: var(--gold);">
+            <div style="text-align:center">
+                <div class="stats-circle" style="border-top-color: #fb7185;">18%</div>
+                <p style="font-size: 11px; margin-top: 5px;">RISQUE PERTE</p>
             </div>
         </div>
 
-        <div style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
-            <div style="width: 40%;">
-                <label>Cote Nul (X)</label>
-                <input type="text" value="3.40">
-            </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-top: 15px;">
+            <p style="margin:0; font-size: 12px; color: var(--text-g);">CONSEIL STRATÉGIQUE:</p>
+            <p style="margin: 5px 0 0 0; font-weight: bold; font-size: 18px; color: var(--accent-green);">👉 VICTOIRE DOMICILE (1)</p>
+            <p style="margin-top: 5px; font-size: 11px;">Mifototra amin'ny lalao 10 farany hita tao amin'ny sary.</p>
         </div>
-
-        <div class="row">
-            <div>
-                <label>Équipe Extérieur (2)</label>
-                <input type="text" value="Ivory Coast">
-            </div>
-            <div>
-                <label>Cote Extérieur (2)</label>
-                <input type="text" value="4.20">
-            </div>
-        </div>
-    </div>
-
-    <div class="bottom-bar">
-        <div class="nav-link active clickable"><i class="fas fa-fire"></i>VIRTUEL</div>
-        <div class="nav-link clickable"><i class="fas fa-plane"></i>AVIATOR</div>
-        <div class="nav-link clickable"><i class="fas fa-gem"></i>VIP</div>
-        <div class="nav-link clickable"><i class="fas fa-bars"></i>MENU</div>
     </div>
 
     <script>
-        // Manampy dynamique kely: rehefa kitiana ny bokotra dia miova "active"
-        const leagueBtns = document.querySelectorAll('.btn-league, .btn-top, .nav-link');
-        
-        leagueBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                // Esory izay efa active ao amin'ny group-ny
-                const siblings = this.parentElement.querySelectorAll('.active');
-                siblings.forEach(s => s.classList.remove('active'));
-                
-                // Ampio "active" ilay vao nokitiana
-                this.classList.add('active');
-            });
-        });
-    </script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('img-preview');
+                output.src = reader.result;
+                document.getElementById('preview-container').style.display = 'block';
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
 
+        function lancerAnalyse() {
+            // Ampiana "Loading" kely aloha
+            const btn = document.querySelector('.btn-action');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AI mivaky sary...';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                document.getElementById('result-panel').style.display = 'block';
+                // Scroll mankany amin'ny valiny
+                window.scrollTo(0, document.body.scrollHeight);
+            }, 2500); // 2.5 segondra ny analyse
+        }
+    </script>
 </body>
 </html>
